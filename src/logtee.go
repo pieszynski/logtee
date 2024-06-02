@@ -36,9 +36,7 @@ func appendLog(fileName string, data []byte) {
 
     data = append(data, []byte("\n")...)
 
-    fExt := filepath.Ext(fileName) 
-    fBase := strings.TrimSuffix(filepath.Base(fileName), fExt)
-    fLogFileName := fmt.Sprintf("%s.%s%s", fBase, time.Now().Format("20060102"), fExt)
+    fLogFileName := getLogFileName(fileName, time.Now())
 
     f, err := os.OpenFile(fLogFileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 
@@ -54,4 +52,11 @@ func appendLog(fileName string, data []byte) {
     if err := f.Close(); err != nil {
         log.Fatal(err)
     }
+}
+
+func getLogFileName(fileName string, now time.Time) (string) {
+    fExt := filepath.Ext(fileName) 
+    fBase := strings.TrimSuffix(filepath.Base(fileName), fExt)
+    fLogFileName := fmt.Sprintf("%s.%s%s", fBase, now.Format("20060102"), fExt)
+    return fLogFileName
 }
